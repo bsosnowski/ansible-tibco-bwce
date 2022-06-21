@@ -1,0 +1,14 @@
+---
+- name: Install the latest version of libnsl
+  become: yes
+  become_user: root
+  ansible.builtin.dnf:
+    name: libnsl
+    state: latest
+    
+
+- include_tasks: lgpl.yml   
+
+- include_tasks: bwce.yml
+
+- include_tasks: studio.yml

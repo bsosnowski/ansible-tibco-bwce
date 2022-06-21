@@ -1,0 +1,4 @@
+---
+bwce_zip: "TIB_bwce_{{ tibco.bwce.version }}_linux26gl23_x86_64.zip"
+bwce_tmp: "{{ system.temp }}/TIB_bwce_{{ tibco.bwce.version }}_linux26gl23_x86_64"
+bwce_silent: "TIBCOUniversalInstaller_bwce.silent"

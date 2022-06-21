@@ -1,0 +1,6 @@
+---
+# 
+studio_dir: "{{ tibco.home }}/bwce/studio/{{ tibco.studio.version }}/eclipse"
+studio_icon: "{{ studio_dir }}/icon.xpm"
+studio_bin: "{{ studio_dir }}/TIBCOBusinessStudio"
+desktop_apps: "{{ tibco.user.home }}/.local/share/applications"

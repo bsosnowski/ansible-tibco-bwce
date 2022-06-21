@@ -1,0 +1,13 @@
+---
+# his playbook will install TIBCO BWCE developer station
+- hosts: all
+  become: yes
+  remote_user: root
+  roles:
+    - role: ./roles/common
+    - role: ./roles/bwce
+      become: true
+      become_user: "{{ tibco.user.name }}"
+
+
+# install telnet, vim, bind-utils, libnsl

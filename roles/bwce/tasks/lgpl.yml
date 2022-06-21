@@ -1,0 +1,8 @@
+---
+- name: Create extlib subdir
+  command: mkdir -p {{ tibco.home }}/extlib/ 
+
+- name: Download zip file
+  get_url:
+    url: "{{ repositories.nexus }}/bwce/{{ tibco.bwce.version }}/linux/{{ lgpl_zip }}"
+    dest: "{{ tibco.home }}/extlib/"

@@ -1,0 +1,20 @@
+tibco:
+  home: /opt/tibco
+  envName: bwce
+  user:
+    name: tibco
+    password: dj7k5mV1UfFBU
+    group: tibco
+    home: /home/tibco
+  bwce:
+    version: 2.7.1
+  lgpl:
+    version: 4.4.1.001
+  studio:
+    version: 4.0  
+
+repositories:
+  nexus: https://nexus.intware.eu/repository/software/tibco/bwce
+
+system:
+  temp: /tmp  

@@ -1,8 +1,11 @@
 ---
 - name: Create extlib subdir
-  command: mkdir -p {{ tibco.home }}/extlib/ 
+  ansible.builtin.file:
+    path: '{{ tibco.home }}/extlib/'
+    state: directory
+    mode: '0755'
 
-- name: Download zip file
-  get_url:
-    url: "{{ repositories.nexus }}/bwce/{{ tibco.bwce.version }}/linux/{{ lgpl_zip }}"
-    dest: "{{ tibco.home }}/extlib/"
+- name: Download lgpl extension
+  ansible.builtin.get_url:
+    url: '{{ repositories.nexus }}/bwce/{{ tibco.bwce.version }}/linux/{{ lgpl_zip }}'
+    dest: '{{ tibco.home }}/extlib/'

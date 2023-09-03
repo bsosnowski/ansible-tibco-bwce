@@ -1,28 +1,37 @@
 ---
-- name: Download zip file
-  get_url:
-    url: "{{ repositories.nexus }}/bwce/{{ tibco.bwce.version }}/linux/{{ bwce_zip }}"
-    dest: "{{ system.temp }}"
+- name: Create BWCE temp directory
+  ansible.builtin.file:
+    path: '{{ bwce_tmp }}'
+    state: directory
+    mode: '0755'
 
-- name: Unzip files
-  command: unzip -o {{ bwce_zip }} -d {{ bwce_tmp }}
-  args:
-    chdir: "{{ system.temp }}"
+- name: Download and unzip BWCE zip archive
+  ansible.builtin.unarchive:
+      src: '{{ repositories.nexus }}/bwce/{{ tibco.bwce.version }}/linux/{{ bwce_zip }}'
+      dest: '{{ bwce_tmp }}'
+      remote_src: 'yes'
 
-- name: Instantiate silent file from template
-  template:
-    src: "TIBCOUniversalInstaller_bwce.silent.j2"
+- name: Instantiate BWCE silent file from template
+  ansible.builtin.template:
+    src: TIBCOUniversalInstaller_bwce.silent.j2
     dest: "{{ bwce_tmp }}/{{ bwce_silent }}"
-    force: yes
+    force: 'yes'
+    mode: '0755'
 
 - name: Run installer
-  command: ./TIBCOUniversalInstaller-lnx-x86-64.bin -silent -V responseFile={{ bwce_silent }}
-  become: yes
+  ansible.builtin.command:
+    cmd: './TIBCOUniversalInstaller-lnx-x86-64.bin -silent -V responseFile={{ bwce_silent }}'
+  become: 'yes'
   become_user: "{{ tibco.user.name }}"
   args:
-    chdir: "{{ bwce_tmp }}"    
+    chdir: "{{ bwce_tmp }}"
 
-- name: Cleanup
-  command: rm {{ bwce_zip }} && rm -rf {{ bwce_tmp }}
-  args:
-    chdir: "{{ system.temp }}"    
+- name: Remove BWCE zip archive
+  ansible.builtin.file:
+    path: '{{ bwce_zip }}'
+    state: absent
+
+- name: Remove BWCE temp directory
+  ansible.builtin.file:
+    path: '{{ bwce_tmp }}'
+    state: absent

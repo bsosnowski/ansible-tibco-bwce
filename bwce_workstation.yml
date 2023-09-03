@@ -1,13 +1,43 @@
 ---
 # his playbook will install TIBCO BWCE developer station
 - hosts: all
-  become: yes
+  become: 'yes'
   remote_user: root
+  pre_tasks:
   roles:
     - role: ./roles/common
+      name: Common tasks
+
+    - role: Comcast.sdkman
+      sdkman_user: "{{ tibco.user.name }}"
+      sdkman_group: "{{ tibco.user.group }}"
+      sdkman_auto_answer: true
+      sdkman_update: true
+      sdkman_install_packages:
+        - { candidate: 'java', version: '11.0.20-amzn' }
+        - { candidate: gradle, version: '8.3' }
+        - { candidate: maven, version: '3.9.4' }
+      sdkman_defaults:
+        gradle: '8.3'
+        maven: '3.9.4'
+        java: '11.0.20-amzn'
+      sdkman_flush_caches_before:
+        - temp
+      sdkman_flush_caches_after:
+        - archives
+        - broadcast
+        - candidates
+        - temp
+      sdkman_offline_mode: false
+      sdkman_update_alternatives:
+        - candidate: java
+          name: java
+          link: /usr/bin/java
+        - candidate: java
+          name: javac
+          link: /usr/bin/javac
+
     - role: ./roles/bwce
+      name: BWCE
       become: true
       become_user: "{{ tibco.user.name }}"
-
-
-# install telnet, vim, bind-utils, libnsl

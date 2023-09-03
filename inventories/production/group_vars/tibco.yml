@@ -7,14 +7,14 @@ tibco:
     group: tibco
     home: /home/tibco
   bwce:
-    version: 2.7.1
+    version: 2.8.3
   lgpl:
     version: 4.4.1.001
   studio:
-    version: 4.0  
+    version: 4.0
 
 repositories:
-  nexus: https://nexus.intware.eu/repository/software/tibco/bwce
+  nexus: https://nexus.intware.eu/repository/tibco/bw/ce
 
 system:
-  temp: /tmp  
+  temp: /tmp

@@ -7,5 +7,5 @@
 
 - name: Download lgpl extension
   ansible.builtin.get_url:
-    url: '{{ repositories.nexus }}/bwce/{{ tibco.bwce.version }}/linux/{{ lgpl_zip }}'
+    url: '{{ repository.url }}/bwce/{{ tibco.bwce.version }}/linux/{{ lgpl_zip }}'
     dest: '{{ tibco.home }}/extlib/'

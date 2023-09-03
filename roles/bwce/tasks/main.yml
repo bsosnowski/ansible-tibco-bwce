@@ -2,12 +2,15 @@
 - name: Install the latest version of libnsl
   become: 'yes'
   become_user: root
-  ansible.builtin.dnf:
+  ansible.builtin.package:
     name: libnsl
-    state: latest
+    state: present
+
 - name: Install lgpl
   include_tasks: 'lgpl.yml'
+
 - name: Install BWCE
   include_tasks: 'bwce.yml'
-- name: Configure Business Studio
-  include_tasks: 'studio.yml'
+
+- name: Execute post installation tasks
+  include_tasks: 'post-install.yml'

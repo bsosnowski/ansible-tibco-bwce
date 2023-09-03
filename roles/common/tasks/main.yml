@@ -13,7 +13,7 @@
 - name: Create TIBCO user
   ansible.builtin.user:
     name: '{{ tibco.user.name }}'
-    password: '{{ tibco.user.password }}'
+    password: "{{ tibco.user.password | password_hash('sha512') }}"
     groups:
       - root
       - '{{ tibco.user.group }}'

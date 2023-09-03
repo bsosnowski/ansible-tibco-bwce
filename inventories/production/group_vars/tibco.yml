@@ -1,9 +1,16 @@
+java:
+  version: 11.0.20-amzn
+maven:
+  version: 3.9.4
+gradle:
+  version: 8.3
+
 tibco:
   home: /opt/tibco
   envName: bwce
   user:
     name: tibco
-    password: dj7k5mV1UfFBU
+    password: tibco
     group: tibco
     home: /home/tibco
   bwce:
@@ -13,8 +20,8 @@ tibco:
   studio:
     version: 4.0
 
-repositories:
-  nexus: https://nexus.intware.eu/repository/tibco/bw/ce
+repository:
+  url: https://nexus.intware.eu/repository/tibco/bw/ce
 
 system:
   temp: /tmp

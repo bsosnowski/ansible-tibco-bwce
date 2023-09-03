@@ -7,7 +7,7 @@
 
 - name: Download and unzip BWCE zip archive
   ansible.builtin.unarchive:
-      src: '{{ repositories.nexus }}/bwce/{{ tibco.bwce.version }}/linux/{{ bwce_zip }}'
+      src: '{{ repository.url }}/bwce/{{ tibco.bwce.version }}/linux/{{ bwce_zip }}'
       dest: '{{ bwce_tmp }}'
       remote_src: 'yes'
 

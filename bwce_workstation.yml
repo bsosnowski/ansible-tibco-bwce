@@ -5,7 +5,7 @@
   remote_user: root
   pre_tasks:
   roles:
-    - role: ./roles/common
+    - role: common
       name: Common tasks
 
     - role: Comcast.sdkman
@@ -14,13 +14,13 @@
       sdkman_auto_answer: true
       sdkman_update: true
       sdkman_install_packages:
-        - { candidate: 'java', version: '11.0.20-amzn' }
-        - { candidate: gradle, version: '8.3' }
-        - { candidate: maven, version: '3.9.4' }
+        - { candidate: 'java', version: '{{ java.version }}' }
+        - { candidate: gradle, version: '{{ gradle.version }}' }
+        - { candidate: maven, version: '{{ maven.version }}' }
       sdkman_defaults:
-        gradle: '8.3'
-        maven: '3.9.4'
-        java: '11.0.20-amzn'
+        gradle: '{{ gradle.version }}'
+        maven: '{{ maven.version }}'
+        java: '{{ java.version }}'
       sdkman_flush_caches_before:
         - temp
       sdkman_flush_caches_after:
@@ -37,7 +37,7 @@
           name: javac
           link: /usr/bin/javac
 
-    - role: ./roles/bwce
+    - role: bwce
       name: BWCE
       become: true
       become_user: "{{ tibco.user.name }}"

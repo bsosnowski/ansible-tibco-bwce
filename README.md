@@ -21,12 +21,11 @@ Artifact repository structure should follow below convention:
 │           ├── TIB_bwplugin-${plugin-name}_${plugin-version}_linux_x86_64.zip
 ```
 
-
 ## Environment setup
 Playbook will create user and group dedicated for TIBCO.
 
 ## Installed components
 - `sdkman` for installation of Java, Maven and Gradle (other tools can be added)
 - `libnsl` library required on RHEL OS family
-- `lgpl` Oracle Elliptic Curve Cryptography (ECC) - LGPL Assemblies
 - `bwce` TIBCO BWCE
+- `plugins` TIBCO BWCE plugins

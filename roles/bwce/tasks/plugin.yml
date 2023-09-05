@@ -1,0 +1,58 @@
+---
+- name: Log plugin details
+  ansible.builtin.debug:
+    msg: "Installing TIBCO plugin [{{ plugin.name }}] in version [{{ plugin.version }}]"
+
+- name: Check if plugin is installed
+  stat:
+    path: '{{ tibco.home }}/bwce/_installInfo/bwplugin{{ plugin.name }}_{{ plugin.version }}_prodInfo.xml'
+  register: plugin_prodinfo
+
+- name: Download and install plugin
+  when: not(plugin_prodinfo.stat.exists)
+  block:
+    - name: Set variables
+      ansible.builtin.set_fact:
+        plugin_archive_url: '{{ repository.url }}/bwplugin{{ plugin.name }}/{{ plugin.version }}/linux/TIB_bwplugin{{ plugin.name }}_{{ plugin.version }}_linux_x86_64.zip'
+        plugin_archive_name: 'TIB_bwplugin{{ plugin.name }}_{{ plugin.version }}_linux_x86_64.zip'
+        plugin_temp_dir: '{{ system.temp }}/TIB_bwplugin{{ plugin.name }}_{{ plugin.version }}_linux_x86_64'
+        plugin_installer_silent_file_name: 'TIBCOUniversalInstaller_plugin.silent'
+        plugin_installer_name: 'TIBCOUniversalInstaller-lnx-x86-64.bin'
+
+    - name: Create plugin temp directory
+      ansible.builtin.file:
+        path: '{{ plugin_temp_dir }}'
+        state: directory
+        mode: '0755'
+
+    - name: Download na unzip plugin zip archive
+      ansible.builtin.unarchive:
+        src: '{{ plugin_archive_url }}'
+        dest: '{{ plugin_temp_dir }}'
+        remote_src: true
+
+    - name: Instantiate plugin silent file from template
+      ansible.builtin.template:
+        src: TIBCOUniversalInstaller_plugin.silent.j2
+        dest: "{{ plugin_temp_dir }}/{{ plugin_installer_silent_file_name }}"
+        force: true
+        mode: '0755'
+
+    - name: Run plugin installer
+      ansible.builtin.command:
+        cmd: './{{ plugin_installer_name }} -silent -V responseFile="{{ plugin_installer_silent_file_name }}" -V logFile="/tmp/plugin_install_{{ plugin.name }}_{{ plugin.version }}.log"'
+      become: true
+      become_user: "{{ tibco.user.name }}"
+      args:
+        chdir: "{{ plugin_temp_dir }}"
+      when: not(plugin_prodinfo.stat.exists)
+
+    - name: Remove plugin zip archive
+      ansible.builtin.file:
+        path: '{{ plugin_temp_dir }}/{{ plugin_archive_name }}'
+        state: absent
+
+    - name: Remove plugin temp directory
+      ansible.builtin.file:
+        path: '{{ plugin_temp_dir }}'
+        state: absent

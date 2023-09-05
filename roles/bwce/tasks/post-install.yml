@@ -3,4 +3,5 @@
   template:
     src: TIBCOBusinessStudio.desktop.j2
     dest: '{{ desktop_apps }}/TIBCOBusinessStudio.desktop'
-    force: yes
+    force: true
+    mode: '0755'

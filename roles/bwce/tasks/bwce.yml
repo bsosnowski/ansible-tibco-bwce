@@ -1,37 +1,46 @@
 ---
-- name: Create BWCE temp directory
-  ansible.builtin.file:
-    path: '{{ bwce_tmp }}'
-    state: directory
-    mode: '0755'
+- name: Check if BWCE is installed
+  stat:
+    path: '{{ tibco.home }}/bwce/_installInfo/bwce_{{ tibco.bwce.version }}_prodInfo.xml'
+  register: bwce_prodinfo
 
-- name: Download and unzip BWCE zip archive
-  ansible.builtin.unarchive:
-      src: '{{ repository.url }}/bwce/{{ tibco.bwce.version }}/linux/{{ bwce_zip }}'
-      dest: '{{ bwce_tmp }}'
-      remote_src: 'yes'
+- name: Download and install BWCE
+  when: not(bwce_prodinfo.stat.exists)
+  block:
+    - name: Create BWCE temp directory
+      ansible.builtin.file:
+        path: '{{ bwce_tmp }}'
+        state: directory
+        mode: '0755'
 
-- name: Instantiate BWCE silent file from template
-  ansible.builtin.template:
-    src: TIBCOUniversalInstaller_bwce.silent.j2
-    dest: "{{ bwce_tmp }}/{{ bwce_silent }}"
-    force: 'yes'
-    mode: '0755'
+    - name: Download and unzip BWCE zip archive
+      ansible.builtin.unarchive:
+        src: '{{ repository.url }}/bwce/{{ tibco.bwce.version }}/linux/{{ bwce_zip }}'
+        dest: '{{ bwce_tmp }}'
+        remote_src: true
 
-- name: Run installer
-  ansible.builtin.command:
-    cmd: './TIBCOUniversalInstaller-lnx-x86-64.bin -silent -V responseFile={{ bwce_silent }}'
-  become: 'yes'
-  become_user: "{{ tibco.user.name }}"
-  args:
-    chdir: "{{ bwce_tmp }}"
+    - name: Instantiate BWCE silent file from template
+      ansible.builtin.template:
+        src: TIBCOUniversalInstaller_bwce.silent.j2
+        dest: "{{ bwce_tmp }}/{{ bwce_silent }}"
+        force: true
+        mode: '0755'
 
-- name: Remove BWCE zip archive
-  ansible.builtin.file:
-    path: '{{ bwce_zip }}'
-    state: absent
+    - name: Run installer
+      ansible.builtin.command:
+        cmd: './TIBCOUniversalInstaller-lnx-x86-64.bin -silent -V responseFile="{{ bwce_silent }}" -V logFile="/tmp/bwce_install_{{ tibco.bwce.version }}.log"'
+      become: true
+      become_user: "{{ tibco.user.name }}"
+      args:
+        chdir: "{{ bwce_tmp }}"
+      when: not(bwce_prodinfo.stat.exists)
 
-- name: Remove BWCE temp directory
-  ansible.builtin.file:
-    path: '{{ bwce_tmp }}'
-    state: absent
+    - name: Remove BWCE zip archive
+      ansible.builtin.file:
+        path: '{{ bwce_zip }}'
+        state: absent
+
+    - name: Remove BWCE temp directory
+      ansible.builtin.file:
+        path: '{{ bwce_tmp }}'
+        state: absent

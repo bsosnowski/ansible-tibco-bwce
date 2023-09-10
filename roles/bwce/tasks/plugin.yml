@@ -18,6 +18,7 @@
         plugin_temp_dir: '{{ system.temp }}/TIB_bwplugin{{ plugin.name }}_{{ plugin.version }}_linux_x86_64'
         plugin_installer_silent_file_name: 'TIBCOUniversalInstaller_plugin.silent'
         plugin_installer_name: 'TIBCOUniversalInstaller-lnx-x86-64.bin'
+        plugin_installer_log_name: 'plugin_install_{{ plugin.name }}_{{ plugin.version }}.log'
 
     - name: Create plugin temp directory
       ansible.builtin.file:
@@ -40,7 +41,7 @@
 
     - name: Run plugin installer
       ansible.builtin.command:
-        cmd: './{{ plugin_installer_name }} -silent -V responseFile="{{ plugin_installer_silent_file_name }}" -V logFile="/tmp/plugin_install_{{ plugin.name }}_{{ plugin.version }}.log"'
+        cmd: './{{ plugin_installer_name }} -silent -V responseFile="{{ plugin_installer_silent_file_name }}" -V logFile="{{ system.temp }}/{{ plugin_installer_log_name }}"'
       become: true
       become_user: "{{ tibco.user.name }}"
       args:

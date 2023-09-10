@@ -7,6 +7,10 @@
 - name: Download and install BWCE
   when: not(bwce_prodinfo.stat.exists)
   block:
+    - name: Set variables
+      ansible.builtin.set_fact:
+        bwce_installer_log_name: 'bwce_install_{{ tibco.bwce.version }}.log'
+
     - name: Create BWCE temp directory
       ansible.builtin.file:
         path: '{{ bwce_tmp }}'
@@ -28,7 +32,7 @@
 
     - name: Run installer
       ansible.builtin.command:
-        cmd: './TIBCOUniversalInstaller-lnx-x86-64.bin -silent -V responseFile="{{ bwce_silent }}" -V logFile="/tmp/bwce_install_{{ tibco.bwce.version }}.log"'
+        cmd: './TIBCOUniversalInstaller-lnx-x86-64.bin -silent -V responseFile="{{ bwce_silent }}" -V logFile="{{ system.temp }}/{{ bwce_installer_log_name }}"'
       become: true
       become_user: "{{ tibco.user.name }}"
       args:

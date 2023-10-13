@@ -1,0 +1,43 @@
+---
+# his playbook will install TIBCO BWCE developer station
+- hosts: all
+  become: 'yes'
+  remote_user: root
+  pre_tasks:
+  roles:
+    - role: common
+      name: Common tasks
+
+    - role: Comcast.sdkman
+      sdkman_user: "{{ tibco.user.name }}"
+      sdkman_group: "{{ tibco.user.group }}"
+      sdkman_auto_answer: true
+      sdkman_update: true
+      sdkman_install_packages:
+        - { candidate: 'java', version: '{{ java.version }}' }
+        - { candidate: gradle, version: '{{ gradle.version }}' }
+        - { candidate: maven, version: '{{ maven.version }}' }
+      sdkman_defaults:
+        gradle: '{{ gradle.version }}'
+        maven: '{{ maven.version }}'
+        java: '{{ java.version }}'
+      sdkman_flush_caches_before:
+        - temp
+      sdkman_flush_caches_after:
+        - archives
+        - broadcast
+        - candidates
+        - temp
+      sdkman_offline_mode: false
+      sdkman_update_alternatives:
+        - candidate: java
+          name: java
+          link: /usr/bin/java
+        - candidate: java
+          name: javac
+          link: /usr/bin/javac
+
+    - role: bwce
+      name: BWCE
+      become: true
+      become_user: "{{ tibco.user.name }}"

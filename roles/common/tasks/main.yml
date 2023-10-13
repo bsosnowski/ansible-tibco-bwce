@@ -1,0 +1,32 @@
+---
+- name: Create TIBCO home directory
+  ansible.builtin.file:
+    path: '{{ tibco.home }}'
+    state: directory
+    mode: '0755'
+
+- name: Create TIBCO group
+  ansible.builtin.group:
+    name: '{{ tibco.user.group }}'
+    state: present
+
+- name: Create TIBCO user
+  ansible.builtin.user:
+    name: '{{ tibco.user.name }}'
+    password: "{{ tibco.user.password | password_hash('sha512') }}"
+    groups:
+      - root
+      - '{{ tibco.user.group }}'
+    state: present
+    shell: /bin/bash
+    system: 'no'
+    create_home: 'yes'
+    home: '{{ tibco.user.home }}'
+
+- name: Set TIBCO home permissions
+  ansible.builtin.file:
+    path: '{{ tibco.home }}'
+    owner: '{{ tibco.user.name }}'
+    group: '{{ tibco.user.group }}'
+    mode: 0774
+    recurse: 'yes'

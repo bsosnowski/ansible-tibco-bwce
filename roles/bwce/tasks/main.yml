@@ -1,0 +1,19 @@
+---
+- name: Install the latest version of libnsl
+  become: true
+  become_user: root
+  ansible.builtin.package:
+    name: libnsl
+    state: present
+
+- name: Install BWCE
+  include_tasks: 'bwce.yml'
+
+- name: Install plugins
+  include_tasks: plugin.yml
+  loop: "{{ tibco.plugins }}"
+  loop_control:
+    loop_var: 'plugin'
+
+- name: Execute post installation tasks
+  include_tasks: 'post-install.yml'

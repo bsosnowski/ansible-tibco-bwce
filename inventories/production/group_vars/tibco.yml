@@ -1,0 +1,33 @@
+---
+java:
+  version: 11.0.20-amzn
+maven:
+  version: 3.9.4
+gradle:
+  version: 8.3
+
+tibco:
+  home: /opt/tibco
+  envName: bwce
+  user:
+    name: tibco
+    password: tibco
+    group: tibco
+    home: /home/tibco
+  bwce:
+    version: 2.8.3
+  plugins:
+    - name: kafka
+      version: 6.7.0
+    - name: amqp
+      version: 6.5.0
+  lgpl:
+    version: 4.4.1.001
+  studio:
+    version: 4.0
+
+repository:
+  url: https://nexus.intware.eu/repository/tibco/bw/ce
+
+system:
+  temp: /tmp

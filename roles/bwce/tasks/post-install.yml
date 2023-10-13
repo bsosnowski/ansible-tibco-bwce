@@ -1,0 +1,7 @@
+---
+- name: Instantiate desktop file from template
+  template:
+    src: TIBCOBusinessStudio.desktop.j2
+    dest: '{{ desktop_apps }}/TIBCOBusinessStudio.desktop'
+    force: true
+    mode: '0755'

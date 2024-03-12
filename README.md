@@ -38,6 +38,6 @@ Modify hosts file here: [hosts](./inventories/production/hosts)
 In order to set BWCE, Java, Maven versions, installation directories and a list of plugins - modify settings here: [tibco.yml](./inventories/production/group_vars/tibco.yml)
 
 ## How to open Business Studio
-This Playbook will install Business Studio icon:
+This Playbook will install Business Studio shortcut:
 
 ![business-studio-icon](./imgs/business-studio-icon.png)

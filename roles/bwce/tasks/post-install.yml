@@ -1,4 +1,8 @@
 ---
+- name: Creates directory
+  ansible.builtin.file:
+    path: '{{ desktop_apps }}'
+    state: directory
 - name: Instantiate desktop file from template
   template:
     src: TIBCOBusinessStudio.desktop.j2

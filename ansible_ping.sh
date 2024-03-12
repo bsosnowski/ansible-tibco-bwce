@@ -1,1 +1,1 @@
-ansible bwce -i ./inventories/production/hosts -m ping
+ansible all -i ./inventories/production/hosts.yaml -m ping

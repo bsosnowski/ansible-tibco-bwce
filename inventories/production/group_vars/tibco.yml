@@ -1,10 +1,10 @@
 ---
 java:
-  version: 11.0.22-amzn
+  version: 11.0.24-amzn
 maven:
-  version: 3.9.6
+  version: 3.8.8
 gradle:
-  version: 8.6
+  version: 8.10.2
 
 tibco:
   home: /opt/tibco
@@ -15,10 +15,10 @@ tibco:
     group: tibco
     home: /home/tibco
   bwce:
-    version: 2.9.0
+    version: 2.9.2
   plugins:
     - name: kafka
-      version: 6.8.0
+      version: 6.8.1
     - name: amqp
       version: 6.5.0
   lgpl:

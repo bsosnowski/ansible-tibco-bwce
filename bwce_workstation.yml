@@ -13,6 +13,7 @@
       sdkman_group: "{{ tibco.user.group }}"
       sdkman_auto_answer: true
       sdkman_update: true
+      sdkman_tmp_dir: /tmp
       sdkman_install_packages:
         - { candidate: 'java', version: '{{ java.version }}' }
         - { candidate: gradle, version: '{{ gradle.version }}' }
